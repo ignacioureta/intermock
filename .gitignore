@@ -30,5 +30,7 @@ bin/src/
 
 # Misc
 .DS_Store
+types.ts
+yarn.lock
 
 docs/dist/build/**/*
