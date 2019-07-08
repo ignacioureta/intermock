@@ -531,7 +531,7 @@ function traverseInterface(
 
 function isSpecificInterface(name: string, options: Options) {
   if (!options.interfaces) {
-    return true;
+    return /^[A-Z_]*$/.test(name);
   }
 
   if (options.interfaces.indexOf(name) === -1) {
@@ -650,6 +650,16 @@ function gatherTypes(sourceFile: ts.SourceFile | ts.ModuleBlock) {
   return types;
 }
 
+function exportStringify(output: Output): string {
+  let result = '';
+  Object.keys(output).forEach(mockKey => {
+    result += `
+      export const ${mockKey} = ${stringify(output[mockKey])}
+    `
+  });
+  return result;
+}
+
 /**
  * Fromat output based on the specified output type in the options object.
  *
@@ -663,7 +673,7 @@ function formatOutput(output: Output, options: Options): string | Output {
     case 'string':
       return stringify(output);
     default:
-      return output;
+      return exportStringify(output);
   }
 }
 
