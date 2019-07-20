@@ -29,9 +29,13 @@ interface Person {
   bestFriend: Dog | Cat;
 }
 
+interface Pack {
+  id: string;
+  dogs: Dog[] | Cat[];
+}
+
 // TODO: test union with
 // generic types
-// arrays
 // functions
 
 export const expectedUnion = {
@@ -42,5 +46,22 @@ export const expectedUnion = {
       name: 'Natasha Jacobs',
       owner: "Animi repellat eveniet eveniet dolores quo ullam rerum reiciendis ipsam. Corrupti voluptatem ipsa illum veritatis eligendi sit autem ut quia. Ea sint voluptas impedit ducimus dolores possimus."
     }
+  },
+  Pack: {
+    id: "bfc8cb62-c6ce-4194-a2a5-499320b837eb",
+    dogs: [
+      {
+        name: "Natasha Jacobs",
+        owner: "Animi repellat eveniet eveniet dolores quo ullam rerum reiciendis ipsam. Corrupti voluptatem ipsa illum veritatis eligendi sit autem ut quia. Ea sint voluptas impedit ducimus dolores possimus."
+      },
+      {
+        name: "Natasha Jacobs",
+        owner: "Animi repellat eveniet eveniet dolores quo ullam rerum reiciendis ipsam. Corrupti voluptatem ipsa illum veritatis eligendi sit autem ut quia. Ea sint voluptas impedit ducimus dolores possimus."
+      },
+      {
+        name: "Natasha Jacobs",
+        owner: "Animi repellat eveniet eveniet dolores quo ullam rerum reiciendis ipsam. Corrupti voluptatem ipsa illum veritatis eligendi sit autem ut quia. Ea sint voluptas impedit ducimus dolores possimus."
+      }
+    ]
   }
 };

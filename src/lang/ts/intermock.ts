@@ -299,9 +299,12 @@ function processArrayPropertyType(
   typeName = typeName.replace('[', '').replace(']', '');
   output[property] = [];
 
-  if ((node.type as ts.ArrayTypeNode).elementType) {
+  if (node.type && (node.type as ts.ArrayTypeNode).elementType) {
     kind = (node.type as ts.ArrayTypeNode).elementType.kind;
+  } else if ((node as unknown as ts.ArrayTypeNode).elementType) {
+    kind = (node as unknown as ts.ArrayTypeNode).elementType.kind;
   }
+
 
   const isPrimitiveType = kind === ts.SyntaxKind.StringKeyword ||
     kind === ts.SyntaxKind.BooleanKeyword ||
@@ -357,7 +360,7 @@ function processUnionPropertyType(
     // @ts-ignore
     const arrayNode = unionNodes.find((node: ts.Node) => node.kind === ts.SyntaxKind.ArrayType);
     if (arrayNode) {
-      processArrayPropertyType(arrayNode, output, property, arrayNode.typeName.text, arrayNode.kind, sourceFile, options, types);
+      processArrayPropertyType(arrayNode, output, property, `[${arrayNode.elementType.typeName.text}]`, arrayNode.kind, sourceFile, options, types);
       return;
     }
     // @ts-ignore

@@ -109,6 +109,11 @@ describe('Intermock TypeScript: Mock tests', () => {
       `${__dirname}/test-data/unions.ts`, 'Person', expectedUnion.Person);
   });
 
+  it('should generate mock for unions - with arrays', () => {
+    return runTestCase(
+      `${__dirname}/test-data/unions.ts`, 'Pack', expectedUnion.Pack);
+  });
+
   it('should generate mock for basic arrays', () => {
     return runTestCase(
       `${__dirname}/test-data/array.ts`, 'User', expectedArray1.User);
