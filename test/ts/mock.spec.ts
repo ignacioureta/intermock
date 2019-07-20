@@ -25,6 +25,7 @@ import { readFiles } from '../../src/lib/read-files';
 import { expectedAny } from './test-data/any';
 import { expectedArray1 } from './test-data/array';
 import { expectedEnum } from './test-data/enum';
+import { expectedUnion } from './test-data/unions';
 import { expectedContractor } from './test-data/extension';
 import { expectedFlat } from './test-data/flat';
 import { FunctionInterface } from './test-data/functions';
@@ -101,6 +102,11 @@ describe('Intermock TypeScript: Mock tests', () => {
   it('should generate mock for enums', () => {
     return runTestCase(
       `${__dirname}/test-data/enum.ts`, 'Person', expectedEnum.Person);
+  });
+
+  it('should generate mock for unions', () => {
+    return runTestCase(
+      `${__dirname}/test-data/unions.ts`, 'Person', expectedUnion.Person);
   });
 
   it('should generate mock for basic arrays', () => {
