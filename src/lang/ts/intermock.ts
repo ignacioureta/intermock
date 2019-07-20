@@ -16,7 +16,7 @@
 import ts from 'typescript';
 
 import { DEFAULT_ARRAY_RANGE, FIXED_ARRAY_COUNT } from '../../lib/constants';
-import { defaultTypeToMock } from '../../lib/default-type-to-mock';
+import { defaultTypeToMock, SupportedTypes } from '../../lib/default-type-to-mock';
 import { fake } from '../../lib/fake';
 import { randomRange } from '../../lib/random-range';
 import { smartProps } from '../../lib/smart-props';
@@ -85,6 +85,9 @@ function generatePrimitive(
   } else if (smartMockType) {
     return fake(smartMockType, options.isFixedMode);
   } else {
+    if (!defaultTypeToMock[syntaxType]) {
+      throw Error(`Unsupported Primitive type ${syntaxType}`);
+    }
     return defaultTypeToMock[syntaxType](isFixedMode);
   }
 }
@@ -321,6 +324,54 @@ function processArrayPropertyType(
   }
 }
 
+/**
+ * Process an array definition.
+ *
+ * @param node Node being processed
+ * @param output The object outputted by Intermock after all types are mocked
+ * @param property Output property to write to
+ * @param typeName Type name of property
+ * @param kind TS data type of property type
+ * @param sourceFile TypeScript AST object compiled from file data
+ * @param options Intermock general options object
+ * @param types Top-level types of interfaces/aliases etc.
+ */
+function processUnionPropertyType(
+  node: ts.PropertySignature, output: Output, property: string,
+  typeName: string, kind: ts.SyntaxKind, sourceFile: ts.SourceFile,
+  options: Options, types: Types) {
+
+  // @ts-ignore
+  const unionNodes = node ? node.type.types.map((type: ts.Node) => type) as ts.SyntaxKind[] : [];
+  // @ts-ignore
+  const supportedType = unionNodes.find((type: ts.Node) => Object.values(SupportedTypes).includes(type.kind))
+  if (supportedType) {
+    return generatePrimitive(property, supportedType, options, '');
+  } else {
+    // @ts-ignore
+    const typeReferenceNode = unionNodes.find((node: ts.Node) => node.kind === ts.SyntaxKind.TypeReference);
+    if (typeReferenceNode) {
+      processPropertyTypeReference(typeReferenceNode, output, property, typeReferenceNode.typeName.text, typeReferenceNode.kind, sourceFile, options, types);
+      return;
+    }
+    // @ts-ignore
+    const arrayNode = unionNodes.find((node: ts.Node) => node.kind === ts.SyntaxKind.ArrayType);
+    if (arrayNode) {
+      processArrayPropertyType(arrayNode, output, property, arrayNode.typeName.text, arrayNode.kind, sourceFile, options, types);
+      return;
+    }
+    // @ts-ignore
+    const functionNode = unionNodes.find((node: ts.Node) => node.kind === ts.SyntaxKind.FunctionType);
+    if (functionNode) {
+      processFunctionPropertyType(functionNode, output, property, sourceFile, options, types);
+      return;
+    }
+
+    console.log(ts.SyntaxKind);
+    throw Error(`Unsupported Union option types: ${(node as any).property}: ${node && (node as any).typename}`);
+  }
+}
+
 function isAnyJsDocs(jsDocs: JSDoc[]) {
   if (jsDocs.length > 0 && jsDocs[0].comment &&
     jsDocs[0].comment.includes('!mockType')) {
@@ -376,6 +427,11 @@ function traverseInterfaceMembers(
     switch (kind) {
       case ts.SyntaxKind.TypeReference:
         processPropertyTypeReference(
+          node, output, property, typeName, kind as ts.SyntaxKind, sourceFile,
+          options, types);
+        break;
+      case ts.SyntaxKind.UnionType:
+        processUnionPropertyType(
           node, output, property, typeName, kind as ts.SyntaxKind, sourceFile,
           options, types);
         break;

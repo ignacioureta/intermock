@@ -29,13 +29,18 @@ interface Person {
   bestFriend: Dog | Cat;
 }
 
+// TODO: test union with
+// generic types
+// arrays
+// functions
+
 export const expectedUnion = {
   Person: {
     name: 'Natasha Jacobs',
     age: 86924,
     bestFriend: {
       name: 'Natasha Jacobs',
-      owner: 'Natasha Jacobs',
+      owner: "Animi repellat eveniet eveniet dolores quo ullam rerum reiciendis ipsam. Corrupti voluptatem ipsa illum veritatis eligendi sit autem ut quia. Ea sint voluptas impedit ducimus dolores possimus."
     }
   }
 };
