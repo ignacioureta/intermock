@@ -17,6 +17,8 @@ interface FlatInterface {
   name: string;
   age: number;
   isCool: boolean;
+  type: 'person',
+  id: 5
 }
 
 export const expectedFlat = {
