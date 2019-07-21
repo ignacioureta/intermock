@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 import ts from 'typescript';
-import {fake} from './fake';
+import { fake } from './fake';
+
+export enum SupportedTypes {
+  NumberKeyword = ts.SyntaxKind.NumberKeyword,
+  StringKeyword = ts.SyntaxKind.StringKeyword,
+  BooleanKeyword = ts.SyntaxKind.BooleanKeyword,
+  ObjectKeyword = ts.SyntaxKind.ObjectKeyword,
+  AnyKeyword = ts.SyntaxKind.AnyKeyword,
+}
 
 /* tslint:disable */
 export const defaultTypeToMock: {
   [index: number]: (isFixedMode: boolean) => string | number | boolean | object
 } = {
   [ts.SyntaxKind.NumberKeyword]: (isFixedMode = false) =>
-      parseInt(fake('random.number', isFixedMode) as string, 10),
+    parseInt(fake('random.number', isFixedMode) as string, 10),
   [ts.SyntaxKind.StringKeyword]: (isFixedMode = false) =>
-      fake('lorem.text', isFixedMode),
+    fake('lorem.text', isFixedMode),
   [ts.SyntaxKind.BooleanKeyword]: (isFixedMode = false) =>
-      JSON.parse(fake('random.boolean', isFixedMode) as string),
+    JSON.parse(fake('random.boolean', isFixedMode) as string),
   [ts.SyntaxKind.ObjectKeyword]: (isFixedMode = false) => {
     return {}
   },
