@@ -101,8 +101,9 @@ function generatePrimitive(
  */
 function isQuestionToken(
   questionToken: ts.Token<ts.SyntaxKind.QuestionToken> | undefined,
+  isUnionWithNull: boolean,
   options: Options) {
-  if (questionToken) {
+  if (questionToken || isUnionWithNull) {
     if (options.isFixedMode && !options.isOptionalAlwaysEnabled) {
       return true;
     }
@@ -371,8 +372,7 @@ function processUnionPropertyType(
       return;
     }
 
-    console.log(ts.SyntaxKind);
-    throw Error(`Unsupported Union option types: ${(node as any).property}: ${node && (node as any).typename}`);
+    throw Error(`Unsupported Union option type ${(node as any).property}: ${node && (node as any).typename}`);
   }
 }
 
@@ -408,13 +408,20 @@ function traverseInterfaceMembers(
       jsDocs = (node as NodeWithDocs).jsDoc;
     }
 
+    let isUnionWithNull = false;
+
     const property = node.name.getText();
     const questionToken = node.questionToken;
+    const isUnion = node.type && node.type.kind === ts.SyntaxKind.UnionType;
+
+    if (isUnion) {
+      isUnionWithNull = !!(node.type as ts.UnionTypeNode).types.map(type => type.kind).some(kind => kind === ts.SyntaxKind.NullKeyword)
+    }
 
     let typeName = '';
     let kind;
 
-    if (isQuestionToken(questionToken, options)) {
+    if (isQuestionToken(questionToken, isUnionWithNull, options)) {
       return;
     }
 

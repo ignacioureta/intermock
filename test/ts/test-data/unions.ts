@@ -39,10 +39,13 @@ interface Account {
   lastDeposit: number | string;
 }
 
+export interface LonelyHuman {
+  name: string;
+  bestFriend: Dog | null;
+}
+
 // TODO: test union with
-// generic types
-// null option as optional
-// functions
+// functions: currently I don't know how to make a Union for functions (if the first union option is a function, then the `|` character gets applied to the return type)
 
 export const expectedUnion = {
   Person: {
@@ -73,5 +76,8 @@ export const expectedUnion = {
   Account: {
     id: "bfc8cb62-c6ce-4194-a2a5-499320b837eb",
     lastDeposit: 86924,
+  },
+  LonelyHuman: {
+    name: 'Natasha Jacobs',
   }
 };
