@@ -126,8 +126,21 @@ function isQuestionToken(
  * @param options Intermock general options object
  */
 function processGenericPropertyType(
-  output: Output, property: string, kind: ts.SyntaxKind, mockType: string,
+  node: ts.Node, output: Output, property: string, kind: ts.SyntaxKind, mockType: string,
   options: Options) {
+  // @ts-ignore
+  if (node && node.type && node.type.kind === ts.SyntaxKind.LiteralType) {
+    if ((node as any).type.literal.kind === ts.SyntaxKind.TrueKeyword) {
+      output[property] = true;
+    } else if ((node as any).type.literal.kind === ts.SyntaxKind.FalseKeyword) {
+      output[property] = false;
+    } else if ((node as any).type.literal.kind === ts.SyntaxKind.StringLiteral) {
+      output[property] = (node as any).type.literal.text;
+    } else {
+      output[property] = parseInt((node as any).type.literal.text, 10);
+    }
+    return;
+  }
   const mock = generatePrimitive(property, kind, options, mockType);
   output[property] = mock;
 }
@@ -457,7 +470,7 @@ function traverseInterfaceMembers(
         break;
       default:
         processGenericPropertyType(
-          output, property, kind as ts.SyntaxKind, '', options);
+          node, output, property, kind as ts.SyntaxKind, '', options);
         break;
     }
   };
