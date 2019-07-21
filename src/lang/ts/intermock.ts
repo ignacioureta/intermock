@@ -349,7 +349,8 @@ function processUnionPropertyType(
   // @ts-ignore
   const supportedType = unionNodes.find((type: ts.Node) => Object.values(SupportedTypes).includes(type.kind))
   if (supportedType) {
-    return generatePrimitive(property, supportedType, options, '');
+    output[property] = generatePrimitive(property, supportedType.kind, options, '');
+    return;
   } else {
     // @ts-ignore
     const typeReferenceNode = unionNodes.find((node: ts.Node) => node.kind === ts.SyntaxKind.TypeReference);

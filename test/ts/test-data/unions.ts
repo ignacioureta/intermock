@@ -34,8 +34,14 @@ interface Pack {
   dogs: Dog[] | Cat[];
 }
 
+interface Account {
+  id: string;
+  lastDeposit: number | string;
+}
+
 // TODO: test union with
 // generic types
+// null option as optional
 // functions
 
 export const expectedUnion = {
@@ -63,5 +69,9 @@ export const expectedUnion = {
         owner: "Animi repellat eveniet eveniet dolores quo ullam rerum reiciendis ipsam. Corrupti voluptatem ipsa illum veritatis eligendi sit autem ut quia. Ea sint voluptas impedit ducimus dolores possimus."
       }
     ]
+  },
+  Account: {
+    id: "bfc8cb62-c6ce-4194-a2a5-499320b837eb",
+    lastDeposit: 86924,
   }
 };

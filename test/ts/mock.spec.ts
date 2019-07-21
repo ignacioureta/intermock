@@ -104,6 +104,11 @@ describe('Intermock TypeScript: Mock tests', () => {
       `${__dirname}/test-data/enum.ts`, 'Person', expectedEnum.Person);
   });
 
+  it('should generate mock for unions - with generic types', () => {
+    return runTestCase(
+      `${__dirname}/test-data/unions.ts`, 'Account', expectedUnion.Account);
+  });
+
   it('should generate mock for unions - with type references', () => {
     return runTestCase(
       `${__dirname}/test-data/unions.ts`, 'Person', expectedUnion.Person);
