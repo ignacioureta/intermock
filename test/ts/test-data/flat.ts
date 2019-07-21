@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 interface FlatInterface {
+  id: 5,
+  type: 'person',
+  wantsFries: true,
+  wantsChocolate: false,
   name: string;
   age: number;
   isCool: boolean;
-  type: 'person',
-  id: 5
 }
 
 export const expectedFlat = {
   name: 'Natasha Jacobs',
   age: 86924,
-  isCool: true
+  isCool: true,
+  type: 'person',
+  id: 5,
+  wantsFries: true,
+  wantsChocolate: false,
 };
