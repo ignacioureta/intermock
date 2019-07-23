@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 interface FlatInterface {
-  id: 5,
-  type: 'person',
-  wantsFries: true,
-  wantsChocolate: false,
-  name: string;
+  id: 5, type: 'person', wantsFries: true, wantsChocolate: false, name: string;
   age: number;
   isCool: boolean;
 }
